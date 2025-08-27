@@ -5,304 +5,255 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Project: Attendance Tracker</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* --- Core Styles from Marathon App (retained for consistency) --- */
         body {
-            font-family: 'Ubuntu', sans-serif;
-            background-color: #f0f4f8; 
-            color: #1e293b; 
+            font-family: 'Inter', sans-serif;
+            background-color: #f1f5f9; /* Slate 100 */
+            color: #334155; /* Slate 700 */
         }
         .main-container {
-            background-color: #ffffff; 
-            border-radius: 0.75rem; 
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); 
+            background-color: #ffffff;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
             width: 100%;
-            max-width: 64rem; /* 1024px */
-            padding: 1.5rem; 
-            margin-left: auto;
-            margin-right: auto;
+            max-width: 72rem;
+            padding: 1.5rem;
+            margin: 2rem auto;
         }
-        @media (min-width: 640px) { 
+        @media (min-width: 640px) {
             .main-container {
-                padding: 2rem; 
+                padding: 2rem;
             }
         }
-        .main-title {
-            font-weight: 800; 
-            letter-spacing: -0.025em; 
-        }
-        .title-project { color: #f59e0b; }
-        .title-main { color: #0284c7; }
-
-        /* --- Logo (retained) --- */
-        .css-logo-dna {
-            font-family: 'Ubuntu', sans-serif;
-            font-weight: 700; 
-            font-size: 3rem; 
-            line-height: 1;
-            text-align: center; 
-            padding: 0.5rem 0.75rem; 
-            display: inline-block; 
-            border-top: 3px solid #f59e0b;
-            border-right: 3px solid #0284c7;
-            border-bottom: 3px solid #0284c7;
-            border-left: 3px solid #f59e0b; 
-            margin-bottom: 0.75rem; 
-        }
-        @media (min-width: 640px) { .css-logo-dna { font-size: 4.5rem; padding: 0.75rem 1rem; } }
-        .css-logo-dna .logo-d { color: #0284c7; }
-        .css-logo-dna .logo-n {
-            background: linear-gradient(to bottom, #0284c7 50%, #f59e0b 50%);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            display: inline-block; 
-        }
-        .css-logo-dna .logo-a { color: #f59e0b; }
-
-        /* --- Navigation Buttons (Adapted for Classes) --- */
+        
+        /* --- Redesigned Navigation --- */
         .nav-button {
-            padding: 0.6rem 1.1rem; 
-            border-radius: 0.375rem; 
-            transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-            font-weight: 600; 
-            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); 
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            transition: all 0.2s ease-in-out;
+            font-weight: 600;
+            border: 2px solid transparent;
+            background-color: #f1f5f9; /* Slate 100 */
+            color: #475569; /* Slate 600 */
         }
-        .nav-button:hover:not(.active) { 
-            background-color: #f3f4f6; 
-            color: #1f2937; 
+        .nav-button:hover:not(.active) {
+            background-color: #e2e8f0; /* Slate 200 */
+            color: #1e293b; /* Slate 800 */
         }
         .nav-button.active {
-            background-color: #059669; /* Emerald Green for active class */
-            color: white; 
-            box-shadow: 0 4px 6px -1px rgba(5, 150, 105, 0.2), 0 2px 4px -1px rgba(5, 150, 105, 0.12);
-        }
-        .nav-button.active:hover { background-color: #047857; } 
-
-        /* --- General Content Cards --- */
-        .content-card {
-            background-color: #fafaf9; 
-            padding: 1.5rem; 
-            border-radius: 0.5rem; 
-        }
-        .stats-card {
-            border-left-width: 4px;
-            border-bottom-width: 4px;
-            border-left-color: #0284c7; 
-            border-bottom-color: #f59e0b; 
-        }
-        .roster-card {
-            border-left-width: 4px;
-            border-bottom-width: 4px;
-            border-left-color: #059669;
-            border-bottom-color: #6366f1;
+            background-color: #059669; /* Emerald 600 */
+            color: white;
+            box-shadow: 0 4px 14px 0 rgba(5, 150, 105, 0.25);
         }
 
-        /* --- NEW: Athlete Roster Styles --- */
-        .athlete-row {
+        /* --- Redesigned Stat Cards --- */
+        .stat-item {
+            background-color: #f8fafc; /* Slate 50 */
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            text-align: center;
+            border: 1px solid #e2e8f0; /* Slate 200 */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        .stat-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
             display: flex;
             align-items: center;
-            padding: 0.75rem 0.5rem;
-            border-bottom: 1px solid #e5e7eb;
-            transition: background-color 0.2s;
+            justify-content: center;
+            margin-bottom: 0.5rem;
         }
-        .athlete-row:last-child {
-            border-bottom: none;
+        .stat-icon svg {
+            width: 24px;
+            height: 24px;
+            color: white;
         }
-        .athlete-row:hover {
-            background-color: #f9fafb;
-        }
-        .athlete-name {
-            font-weight: 500;
-            color: #1e293b;
-            flex-grow: 1;
-        }
-        .payment-status {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            margin-right: 1rem;
-            flex-shrink: 0;
-            box-shadow: 0 0 5px rgba(0,0,0,0.1);
-        }
-        .payment-status-paid { background-color: #22c55e; } /* Green */
-        .payment-status-unpaid { background-color: #ef4444; } /* Red */
-
-        /* --- NEW: Attendance Toggle Switch --- */
-        .attendance-toggle {
-            position: relative;
-            display: inline-block;
-            width: 50px;
-            height: 26px;
-            flex-shrink: 0;
-        }
-        .attendance-toggle input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #ccc;
-            transition: .4s;
-            border-radius: 26px;
-        }
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 20px;
-            width: 20px;
-            left: 3px;
-            bottom: 3px;
-            background-color: white;
-            transition: .4s;
-            border-radius: 50%;
-        }
-        input:checked + .slider {
-            background-color: #059669; /* Emerald Green */
-        }
-        input:checked + .slider:before {
-            transform: translateX(24px);
-        }
-        .toggle-container .loader {
-            width: 20px;
-            height: 20px;
-            border-width: 2px;
-            margin-left: 15px;
-            display: none; /* Hidden by default */
-        }
-
-        /* --- NEW: Statistics Display --- */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 1rem;
-        }
-        .stat-item {
-            background-color: #fff;
-            padding: 1rem;
-            border-radius: 0.5rem;
-            text-align: center;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-            border-top: 4px solid;
-        }
-        .stat-item-daily { border-color: #3b82f6; } /* Blue */
-        .stat-item-weekly { border-color: #f59e0b; } /* Amber */
-        .stat-item-monthly { border-color: #8b5cf6; } /* Violet */
-
         .stat-value {
-            font-size: 2.25rem;
+            font-size: 2.5rem;
             font-weight: 700;
             line-height: 1;
         }
         .stat-label {
             font-size: 0.875rem;
             font-weight: 500;
-            color: #4b5563;
-            margin-top: 0.25rem;
+            color: #64748b; /* Slate 500 */
         }
 
-        /* --- Loader and Error States (retained) --- */
+        /* --- Redesigned Roster --- */
+        .athlete-row {
+            display: flex;
+            align-items: center;
+            padding: 1rem 0.5rem;
+            border-bottom: 1px solid #e2e8f0; /* Slate 200 */
+            transition: background-color 0.2s;
+        }
+        .athlete-row:last-child {
+            border-bottom: none;
+        }
+        .athlete-row:hover {
+            background-color: #f8fafc; /* Slate 50 */
+        }
+        .athlete-name {
+            font-weight: 600;
+            font-size: 1.125rem;
+            color: #1e293b; /* Slate 800 */
+            flex-grow: 1;
+        }
+        .payment-status-pill {
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.25rem 0.6rem;
+            border-radius: 9999px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-right: 1rem;
+        }
+        .payment-status-paid {
+            background-color: #dcfce7; /* Green 100 */
+            color: #166534; /* Green 800 */
+        }
+        .payment-status-unpaid {
+            background-color: #fee2e2; /* Red 100 */
+            color: #991b1b; /* Red 800 */
+        }
+
+        /* --- Redesigned Toggle Switch --- */
+        .attendance-toggle {
+            position: relative;
+            display: inline-block;
+            width: 52px;
+            height: 30px;
+            flex-shrink: 0;
+        }
+        .attendance-toggle input { display: none; }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #cbd5e1; /* Slate 300 */
+            transition: .3s;
+            border-radius: 30px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 22px; width: 22px;
+            left: 4px; bottom: 4px;
+            background-color: white;
+            transition: .3s;
+            border-radius: 50%;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        input:checked + .slider {
+            background-color: #059669; /* Emerald 600 */
+        }
+        input:checked + .slider:before {
+            transform: translateX(22px);
+        }
+
+        /* --- Search Bar --- */
+        .search-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            border-radius: 0.5rem;
+            border: 1px solid #cbd5e1; /* Slate 300 */
+            background-color: #f8fafc; /* Slate 50 */
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .search-input:focus {
+            outline: none;
+            border-color: #059669;
+            box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.15);
+        }
+
+        /* --- Loader --- */
         .loader {
-            border: 4px solid #f3f3f3; 
-            border-top: 4px solid #3b82f6; 
+            border: 3px solid #e2e8f0;
+            border-top: 3px solid #059669;
             border-radius: 50%;
             width: 24px;
             height: 24px;
             animation: spin 1s linear infinite;
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        .message-center { 
-            text-align: center; 
-            padding: 2rem; 
-            font-size: 1.125rem; 
-            font-weight: 500; 
-        }
-        #loading-message { color: #0369a1; } 
-        #error-message { 
-            color: #dc2626; 
-            background-color: #fee2e2; 
-            border: 1px solid #f87171; 
-            border-radius: 0.5rem; 
-        }
     </style>
 </head>
-<body class="min-h-screen p-4 py-8">
+<body class="p-4">
 
-    <!-- Simplified "Login" - a single button to load data -->
-    <div id="login-container" class="main-container">
+    <!-- Login Screen -->
+    <div id="login-container" class="main-container max-w-md">
         <header class="mb-8 text-center">
-            <div class="css-logo-dna">
-                <span class="logo-d">A</span><span class="logo-n">T</span><span class="logo-a">T</span>
-            </div>
-            <h1 class="text-3xl sm:text-4xl main-title text-stone-800 mt-2"> 
-                <span class="title-project">Project:</span> <span class="title-main">Attendance</span>
+            <h1 class="text-3xl sm:text-4xl font-bold text-slate-800">
+                Attendance Tracker
             </h1>
+            <p class="text-slate-500 mt-2">Please load the roster to begin.</p>
         </header>
-        <div class="space-y-4 max-w-sm mx-auto">
-            <button id="loadDataButton" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-full shadow-sm text-lg font-medium text-white bg-sky-600 hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">
+        <div class="space-y-4">
+            <button id="loadDataButton" class="w-full flex justify-center items-center gap-2 py-3 px-4 border border-transparent rounded-lg shadow-sm text-lg font-semibold text-white bg-emerald-600 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 transition-all">
                 Load Roster
             </button>
-            <div id="login-loading-message" class="hidden message-center">
-                <div class="loader mx-auto mb-2"></div>
-                Loading...
+            <div id="login-loading-message" class="hidden message-center flex flex-col items-center gap-2 text-slate-600">
+                <div class="loader"></div>
+                <span>Loading...</span>
             </div>
-            <div id="login-error-message" class="hidden message-center error"></div>
         </div>
     </div>
 
     <!-- Main Application Wrapper -->
     <div id="main-app-wrapper" class="main-container hidden">
-        <header class="mb-8 text-center"> 
-            <div class="css-logo-dna">
-                <span class="logo-d">A</span><span class="logo-n">T</span><span class="logo-a">T</span>
-            </div>
-            <h1 class="text-3xl sm:text-4xl main-title text-stone-800 mt-2"> 
-                <span class="title-project">Class</span> <span class="title-main">Attendance</span>
+        <header class="mb-6 pb-6 border-b border-slate-200">
+            <h1 class="text-3xl sm:text-4xl font-bold text-slate-800 text-center">
+                Class Attendance
             </h1>
-            <p class="text-stone-600 mt-2 text-lg" id="current-date-display">
-                <!-- Date will be injected here by JS -->
-            </p>
+            <p class="text-slate-500 mt-2 text-lg text-center" id="current-date-display"></p>
         </header>
 
-        <!-- Class Navigation Tabs -->
-        <nav class="mb-8 flex flex-wrap justify-center gap-2 sm:gap-3 pb-4 border-b-2 border-slate-200">
-            <button id="class-4-30" data-class-name="4:30" class="nav-button">4:30</button>
-            <button id="class-5-30" data-class-name="5:30" class="nav-button">5:30</button>
-            <button id="class-6-30" data-class-name="6:30" class="nav-button">6:30</button>
-            <button id="class-7-00" data-class-name="7:00" class="nav-button">7:00</button>
-            <button id="class-7-15" data-class-name="7:15" class="nav-button">7:15</button>
-            <button id="class-8-00" data-class-name="8:00" class="nav-button">8:00</button>
+        <!-- Main Navigation: Summary + Classes -->
+        <nav class="mb-8 flex flex-wrap justify-center gap-2 sm:gap-3">
+            <!-- CHANGED: Added Summary tab -->
+            <button id="nav-summary" class="nav-button">Summary</button>
+            <button id="class-4-30" data-class-name="4:30" class="nav-button class-btn">4:30</button>
+            <button id="class-5-30" data-class-name="5:30" class="nav-button class-btn">5:30</button>
+            <button id="class-6-30" data-class-name="6:30" class="nav-button class-btn">6:30</button>
+            <button id="class-7-00" data-class-name="7:00" class="nav-button class-btn">7:00</button>
+            <button id="class-7-15" data-class-name="7:15" class="nav-button class-btn">7:15</button>
+            <button id="class-8-00" data-class-name="8:00" class="nav-button class-btn">8:00</button>
         </nav>
 
-        <main id="app-content" class="space-y-6">
-            <!-- Loading/Error messages will appear here -->
-            <div id="loading-message" class="message-center">
-                <div class="loader mx-auto mb-2"></div>
-                Loading attendance data from Google Sheet...
+        <main id="app-content">
+            <div id="loading-message" class="flex flex-col items-center gap-4 p-8 text-slate-600">
+                <div class="loader"></div>
+                <span class="text-lg font-medium">Loading attendance data...</span>
             </div>
-            <div id="error-message" class="hidden message-center"></div>
+            <div id="error-message" class="hidden text-center p-4 bg-red-100 text-red-800 rounded-lg"></div>
 
-            <!-- Content (Stats and Roster) will be injected here -->
-            <div id="content-wrapper" class="hidden space-y-6">
-                 <!-- Statistics Section -->
-                <section id="stats-container" class="content-card stats-card">
-                    <h2 class="text-xl sm:text-2xl font-semibold text-sky-700 mb-4">Attendance Summary</h2>
-                    <div id="stats-grid-content" class="stats-grid">
+            <!-- Content Area: Toggled between Summary and Roster -->
+            <div id="content-wrapper" class="hidden">
+                
+                <!-- Summary View -->
+                <section id="stats-container" class="hidden">
+                     <h2 class="text-2xl font-bold text-slate-700 mb-4">Attendance Summary</h2>
+                     <div id="stats-grid-content" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
                         <!-- Stat items will be injected here -->
                     </div>
                 </section>
 
-                <!-- Roster Section -->
-                <section id="roster-container" class="content-card roster-card">
-                    <h2 id="roster-title" class="text-xl sm:text-2xl font-semibold text-emerald-700 mb-4">Class Roster</h2>
-                    <div id="class-roster-content">
+                <!-- Roster View -->
+                <section id="roster-container" class="hidden">
+                    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 gap-4">
+                        <h2 id="roster-title" class="text-2xl font-bold text-slate-700">Class Roster</h2>
+                        <input type="text" id="search-bar" class="search-input sm:max-w-xs" placeholder="Search for an athlete...">
+                    </div>
+                    <div id="class-roster-content" class="bg-white rounded-lg border border-slate-200">
                         <!-- Athlete rows will be injected here -->
                     </div>
                 </section>
@@ -312,53 +263,42 @@
 
 <script>
 // --- CONFIGURATION ---
-// IMPORTANT: This URL connects the app to your Google Sheet backend.
 const GOOGLE_SHEET_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyDqp_Jxx0IBEipErg0zjmAyCI1ksAJK3t9lXSTo2bsHUaekxG51enh5-eyZoZSJw7S4w/exec";
 
 // --- GLOBAL STATE ---
-let allAthletesData = []; // To store the fetched data from the Google Sheet.
-let currentClass = "4:30"; // Default class to show on load.
+let allAthletesData = [];
+let currentClass = "4:30";
 
 // --- DOM ELEMENT REFERENCES ---
 const loginContainer = document.getElementById('login-container');
 const mainAppWrapper = document.getElementById('main-app-wrapper');
-const appContent = document.getElementById('app-content');
 const loadingMessageDiv = document.getElementById('loading-message');
 const errorMessageDiv = document.getElementById('error-message');
 const contentWrapper = document.getElementById('content-wrapper');
 const loadDataButton = document.getElementById('loadDataButton');
 const loginLoadingMessageDiv = document.getElementById('login-loading-message');
+const searchBar = document.getElementById('search-bar');
+// CHANGED: Added references for new containers and buttons
+const statsContainer = document.getElementById('stats-container');
+const rosterContainer = document.getElementById('roster-container');
+const summaryNavButton = document.getElementById('nav-summary');
+const classNavButtons = document.querySelectorAll('.class-btn');
+
 
 // --- DATE HELPERS ---
-/**
- * Gets the current date formatted as 'YYYY-MM-DD'.
- * @returns {string} The formatted date string.
- */
 const getTodayString = () => new Date().toISOString().slice(0, 10);
-
-/**
- * Gets the start and end dates of the current week (Monday to Sunday).
- * @returns {{start: Date, end: Date}}
- */
 const getWeekStartEnd = () => {
     const now = new Date();
-    const dayOfWeek = now.getDay(); // 0 (Sun) to 6 (Sat)
+    const dayOfWeek = now.getDay();
     const start = new Date(now);
-    // If Sunday, go back 6 days. Otherwise, go back (dayOfWeek - 1) days.
     const diff = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
     start.setDate(now.getDate() + diff);
     start.setHours(0, 0, 0, 0);
-
     const end = new Date(start);
     end.setDate(start.getDate() + 6);
     end.setHours(23, 59, 59, 999);
     return { start, end };
 };
-
-/**
- * Gets the start and end dates of the current month.
- * @returns {{start: Date, end: Date}}
- */
 const getMonthStartEnd = () => {
     const now = new Date();
     const start = new Date(now.getFullYear(), now.getMonth(), 1);
@@ -367,120 +307,75 @@ const getMonthStartEnd = () => {
     return { start, end };
 };
 
-
 // --- DATA FETCHING & UPDATING ---
-
-/**
- * Fetches the initial athlete data from the Google Sheet.
- * This is called once when the app loads.
- */
 async function fetchData() {
     loadingMessageDiv.classList.remove('hidden');
     errorMessageDiv.classList.add('hidden');
     contentWrapper.classList.add('hidden');
     try {
         const response = await fetch(GOOGLE_SHEET_WEB_APP_URL);
-        if (!response.ok) {
-            throw new Error(`Network error: ${response.statusText}`);
-        }
+        if (!response.ok) throw new Error(`Network error: ${response.statusText}`);
         const data = await response.json();
-        if (data.error) {
-            throw new Error(`Sheet error: ${data.error}`);
-        }
-
+        if (data.error) throw new Error(`Sheet error: ${data.error}`);
         allAthletesData = data.athletes;
         initializeApp();
-
     } catch (error) {
         console.error('Failed to fetch data:', error);
-        errorMessageDiv.textContent = `Error loading data: ${error.message}. Please check the URL and your Google Sheet. Make sure your sheet has 'firstName' and 'surname' columns.`;
+        errorMessageDiv.textContent = `Error loading data: ${error.message}. Please check your sheet columns and redeploy the script.`;
         loadingMessageDiv.classList.add('hidden');
         errorMessageDiv.classList.remove('hidden');
     }
 }
 
-/**
- * Updates an athlete's attendance status by sending data to the Google Sheet.
- * @param {string} firstName - The first name of the athlete to update.
- * @param {string} surname - The surname of the athlete to update.
- * @param {boolean} isPresent - The new attendance status.
- * @param {HTMLInputElement} checkbox - The checkbox element that was toggled.
- */
-// CHANGED: Function now accepts firstName and surname instead of a single athleteName.
 async function updateAttendance(firstName, surname, isPresent, checkbox) {
     const date = getTodayString();
     const toggleContainer = checkbox.closest('.toggle-container');
     const loader = toggleContainer.querySelector('.loader');
-
-    // Show loader
     loader.style.display = 'inline-block';
-
     try {
-        // This simplified fetch request works better with Google Apps Script redirects.
         const response = await fetch(GOOGLE_SHEET_WEB_APP_URL, {
             method: 'POST',
-            body: JSON.stringify({
-                // CHANGED: Sending firstName and surname separately.
-                firstName: firstName,
-                surname: surname,
-                date: date,
-                status: isPresent ? 'Present' : '' // Send 'Present' or an empty string
-            }),
+            body: JSON.stringify({ firstName, surname, date, status: isPresent ? 'Present' : '' }),
         });
-
-        if (!response.ok) {
-            throw new Error('Failed to save data. Network error.');
-        }
+        if (!response.ok) throw new Error('Network error during update.');
         const result = await response.json();
-
-        if (result.status !== 'success') {
-            throw new Error(result.message || 'Unknown error from server.');
-        }
+        if (result.status !== 'success') throw new Error(result.message || 'Unknown server error.');
         
-        // On success, update the local data model to match
-        // CHANGED: Find the athlete using both firstName and surname.
         const athlete = allAthletesData.find(a => a.firstName === firstName && a.surname === surname);
         if (athlete) {
-            if (!athlete.attendance) {
-                athlete.attendance = {};
-            }
+            if (!athlete.attendance) athlete.attendance = {};
             athlete.attendance[date] = isPresent;
         }
-
-        // Recalculate and render stats after successful update
-        calculateAndRenderStats();
-
+        calculateAndRenderStats(); // Recalculate stats in the background
     } catch (error) {
         console.error('Update failed:', error);
-        // Revert the checkbox state on failure
-        checkbox.checked = !isPresent; 
-        // CHANGED: Updated alert message.
+        checkbox.checked = !isPresent;
         alert(`Failed to update attendance for ${firstName} ${surname}. Please try again.`);
     } finally {
-        // Hide loader
         loader.style.display = 'none';
     }
 }
 
+// --- VIEW MANAGEMENT ---
+// CHANGED: Functions to explicitly show one view and hide the other
+function showRosterView() {
+    statsContainer.classList.add('hidden');
+    rosterContainer.classList.remove('hidden');
+}
+
+function showSummaryView() {
+    rosterContainer.classList.add('hidden');
+    statsContainer.classList.remove('hidden');
+}
+
 
 // --- RENDERING FUNCTIONS ---
-
-/**
- * Sets the active state for the current class navigation button.
- * @param {string} activeId - The ID of the nav button to activate.
- */
 function setActiveNav(activeId) {
     document.querySelectorAll('.nav-button').forEach(btn => {
-        btn.classList.remove('active');
-        if (btn.id === activeId) {
-            btn.classList.add('active');
-        }
+        btn.classList.toggle('active', btn.id === activeId);
     });
 }
 
-/**
- * Calculates and displays the attendance statistics.
- */
 function calculateAndRenderStats() {
     const statsGrid = document.getElementById('stats-grid-content');
     if (!statsGrid) return;
@@ -494,69 +389,60 @@ function calculateAndRenderStats() {
     const monthlyPresent = new Set();
 
     allAthletesData.forEach(athlete => {
-        // CHANGED: Create a unique identifier for the set from first and last name.
         const fullName = `${athlete.firstName} ${athlete.surname}`;
-        if (athlete.attendance) {
-            // Daily
-            if (athlete.attendance[todayStr]) {
-                dailyPresent.add(fullName);
-            }
-
-            // Weekly & Monthly
-            for (const dateStr in athlete.attendance) {
-                if(athlete.attendance[dateStr]) { // Check if present on that day
-                    // Ensure the date string is parsed correctly, especially on browsers like Safari
-                    const entryDate = new Date(dateStr.replace(/-/g, '/'));
-                    if (entryDate >= weekStart && entryDate <= weekEnd) {
-                        weeklyPresent.add(fullName);
-                    }
-                    if (entryDate >= monthStart && entryDate <= monthEnd) {
-                        monthlyPresent.add(fullName);
-                    }
-                }
+        if (!athlete.attendance) return;
+        if (athlete.attendance[todayStr]) dailyPresent.add(fullName);
+        for (const dateStr in athlete.attendance) {
+            if (athlete.attendance[dateStr]) {
+                const entryDate = new Date(dateStr.replace(/-/g, '/'));
+                if (entryDate >= weekStart && entryDate <= weekEnd) weeklyPresent.add(fullName);
+                if (entryDate >= monthStart && entryDate <= monthEnd) monthlyPresent.add(fullName);
             }
         }
     });
 
     statsGrid.innerHTML = `
-        <div class="stat-item stat-item-daily">
+        <div class="stat-item">
+            <div class="stat-icon bg-blue-500">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0h18M12 12.75h.008v.008H12v-.008z" /></svg>
+            </div>
             <div class="stat-value text-blue-600">${dailyPresent.size}</div>
-            <div class="stat-label">Today</div>
+            <div class="stat-label">Present Today</div>
         </div>
-        <div class="stat-item stat-item-weekly">
+        <div class="stat-item">
+            <div class="stat-icon bg-amber-500">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0h18M12 12.75h.008v.008H12v-.008z" /></svg>
+            </div>
             <div class="stat-value text-amber-600">${weeklyPresent.size}</div>
-            <div class="stat-label">This Week</div>
+            <div class="stat-label">Unique This Week</div>
         </div>
-        <div class="stat-item stat-item-monthly">
+        <div class="stat-item">
+            <div class="stat-icon bg-violet-500">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0h18M12 12.75h.008v.008H12v-.008z" /></svg>
+            </div>
             <div class="stat-value text-violet-600">${monthlyPresent.size}</div>
-            <div class="stat-label">This Month</div>
+            <div class="stat-label">Unique This Month</div>
         </div>
     `;
 }
 
-/**
- * Renders the list of athletes for the currently selected class.
- */
 function renderRoster() {
     const rosterContent = document.getElementById('class-roster-content');
     const rosterTitle = document.getElementById('roster-title');
     if (!rosterContent || !rosterTitle) return;
 
-    rosterTitle.textContent = `Class ${currentClass} Roster`;
-
+    rosterTitle.textContent = `Class ${currentClass}`;
+    
+    const searchTerm = searchBar.value.toLowerCase();
     const athletesInClass = allAthletesData
-        .filter(athlete => String(athlete.class) === currentClass) // Ensure comparison is string-to-string
-        // CHANGED: Sort by surname, then first name.
-        .sort((a, b) => {
-            if (a.surname < b.surname) return -1;
-            if (a.surname > b.surname) return 1;
-            if (a.firstName < b.firstName) return -1;
-            if (a.firstName > b.firstName) return 1;
-            return 0;
-        });
+        .filter(athlete => {
+            const fullName = `${athlete.firstName} ${athlete.surname}`.toLowerCase();
+            return String(athlete.class) === currentClass && fullName.includes(searchTerm);
+        })
+        .sort((a, b) => a.surname.localeCompare(b.surname) || a.firstName.localeCompare(b.firstName));
 
     if (athletesInClass.length === 0) {
-        rosterContent.innerHTML = `<p class="text-stone-500 italic p-4 text-center">No athletes found for this class.</p>`;
+        rosterContent.innerHTML = `<p class="text-slate-500 italic p-6 text-center">No athletes found for this class.</p>`;
         return;
     }
 
@@ -564,79 +450,71 @@ function renderRoster() {
     rosterContent.innerHTML = athletesInClass.map(athlete => {
         const isPaid = String(athlete.paymentStatus).toLowerCase() === 'paid';
         const paymentClass = isPaid ? 'payment-status-paid' : 'payment-status-unpaid';
-        const paymentTitle = isPaid ? 'Payment Status: Paid' : 'Payment Status: Unpaid';
+        const paymentText = isPaid ? 'Paid' : 'Unpaid';
         const isPresentToday = athlete.attendance && athlete.attendance[today];
 
         return `
             <div class="athlete-row">
-                <div title="${paymentTitle}" class="payment-status ${paymentClass}"></div>
-                <!-- CHANGED: Display both first name and surname -->
+                <div class="payment-status-pill ${paymentClass}">${paymentText}</div>
                 <div class="athlete-name">${athlete.firstName} ${athlete.surname}</div>
                 <div class="toggle-container flex items-center">
                     <label class="attendance-toggle">
-                        <!-- CHANGED: Added data attributes for both names -->
                         <input type="checkbox" class="attendance-checkbox" 
                                data-firstname="${athlete.firstName}" 
                                data-surname="${athlete.surname}" 
                                ${isPresentToday ? 'checked' : ''}>
                         <span class="slider"></span>
                     </label>
-                    <div class="loader"></div>
+                    <div class="loader" style="display: none;"></div>
                 </div>
             </div>
         `;
     }).join('');
 
-    // Add event listeners to the new checkboxes
     rosterContent.querySelectorAll('.attendance-checkbox').forEach(checkbox => {
         checkbox.addEventListener('change', (e) => {
-            // CHANGED: Get both names from the data attributes.
-            const firstName = e.target.dataset.firstname;
-            const surname = e.target.dataset.surname;
-            const isPresent = e.target.checked;
-            updateAttendance(firstName, surname, isPresent, e.target);
+            const { firstname, surname } = e.target.dataset;
+            updateAttendance(firstname, surname, e.target.checked, e.target);
         });
     });
 }
 
-
 // --- INITIALIZATION ---
-
-/**
- * Initializes the main application view after data is loaded.
- */
 function initializeApp() {
-    // Hide loading message and show main content area
     loadingMessageDiv.classList.add('hidden');
-    errorMessageDiv.classList.add('hidden');
     contentWrapper.classList.remove('hidden');
     mainAppWrapper.classList.remove('hidden');
     loginContainer.classList.add('hidden');
 
-    // Set up navigation
-    document.querySelectorAll('.nav-button').forEach(button => {
-        button.addEventListener('click', () => {
-            currentClass = button.dataset.className;
-            setActiveNav(button.id);
-            renderRoster(); // Re-render roster for the new class
-        });
+    // CHANGED: Set up event listeners for new tabbed navigation
+    summaryNavButton.addEventListener('click', () => {
+        setActiveNav('nav-summary');
+        showSummaryView();
     });
 
-    // Set current date in header
-    const today = new Date();
-    document.getElementById('current-date-display').textContent = today.toLocaleDateString(undefined, {
+    classNavButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            currentClass = button.dataset.className;
+            searchBar.value = ''; // Clear search when changing class
+            setActiveNav(button.id);
+            renderRoster();
+            showRosterView();
+        });
+    });
+    
+    searchBar.addEventListener('input', renderRoster);
+
+    document.getElementById('current-date-display').textContent = new Date().toLocaleDateString(undefined, {
         weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
     });
 
-    // Initial render
+    // Initial render state
     setActiveNav(`class-${currentClass.replace(':', '-')}`);
     calculateAndRenderStats();
     renderRoster();
+    showRosterView(); // Start on the roster view by default
 }
 
-/**
- * Handles the initial data loading when the user clicks the button.
- */
 async function handleLoadData() {
     loadDataButton.classList.add('hidden');
     loginLoadingMessageDiv.classList.remove('hidden');
@@ -644,8 +522,6 @@ async function handleLoadData() {
     loginLoadingMessageDiv.classList.add('hidden');
 }
 
-
-// --- APP ENTRY POINT ---
 document.addEventListener('DOMContentLoaded', () => {
     loadDataButton.addEventListener('click', handleLoadData);
 });
