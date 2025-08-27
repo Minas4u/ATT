@@ -393,7 +393,7 @@ async function fetchData() {
 
     } catch (error) {
         console.error('Failed to fetch data:', error);
-        errorMessageDiv.textContent = `Error loading data: ${error.message}. Please check the URL and your Google Sheet.`;
+        errorMessageDiv.textContent = `Error loading data: ${error.message}. Please check the URL and your Google Sheet. Make sure your sheet has 'firstName' and 'surname' columns.`;
         loadingMessageDiv.classList.add('hidden');
         errorMessageDiv.classList.remove('hidden');
     }
@@ -401,11 +401,13 @@ async function fetchData() {
 
 /**
  * Updates an athlete's attendance status by sending data to the Google Sheet.
- * @param {string} athleteName - The name of the athlete to update.
+ * @param {string} firstName - The first name of the athlete to update.
+ * @param {string} surname - The surname of the athlete to update.
  * @param {boolean} isPresent - The new attendance status.
  * @param {HTMLInputElement} checkbox - The checkbox element that was toggled.
  */
-async function updateAttendance(athleteName, isPresent, checkbox) {
+// CHANGED: Function now accepts firstName and surname instead of a single athleteName.
+async function updateAttendance(firstName, surname, isPresent, checkbox) {
     const date = getTodayString();
     const toggleContainer = checkbox.closest('.toggle-container');
     const loader = toggleContainer.querySelector('.loader');
@@ -418,7 +420,9 @@ async function updateAttendance(athleteName, isPresent, checkbox) {
         const response = await fetch(GOOGLE_SHEET_WEB_APP_URL, {
             method: 'POST',
             body: JSON.stringify({
-                name: athleteName,
+                // CHANGED: Sending firstName and surname separately.
+                firstName: firstName,
+                surname: surname,
                 date: date,
                 status: isPresent ? 'Present' : '' // Send 'Present' or an empty string
             }),
@@ -434,7 +438,8 @@ async function updateAttendance(athleteName, isPresent, checkbox) {
         }
         
         // On success, update the local data model to match
-        const athlete = allAthletesData.find(a => a.name === athleteName);
+        // CHANGED: Find the athlete using both firstName and surname.
+        const athlete = allAthletesData.find(a => a.firstName === firstName && a.surname === surname);
         if (athlete) {
             if (!athlete.attendance) {
                 athlete.attendance = {};
@@ -449,7 +454,8 @@ async function updateAttendance(athleteName, isPresent, checkbox) {
         console.error('Update failed:', error);
         // Revert the checkbox state on failure
         checkbox.checked = !isPresent; 
-        alert(`Failed to update attendance for ${athleteName}. Please try again.`);
+        // CHANGED: Updated alert message.
+        alert(`Failed to update attendance for ${firstName} ${surname}. Please try again.`);
     } finally {
         // Hide loader
         loader.style.display = 'none';
@@ -488,10 +494,12 @@ function calculateAndRenderStats() {
     const monthlyPresent = new Set();
 
     allAthletesData.forEach(athlete => {
+        // CHANGED: Create a unique identifier for the set from first and last name.
+        const fullName = `${athlete.firstName} ${athlete.surname}`;
         if (athlete.attendance) {
             // Daily
             if (athlete.attendance[todayStr]) {
-                dailyPresent.add(athlete.name);
+                dailyPresent.add(fullName);
             }
 
             // Weekly & Monthly
@@ -500,10 +508,10 @@ function calculateAndRenderStats() {
                     // Ensure the date string is parsed correctly, especially on browsers like Safari
                     const entryDate = new Date(dateStr.replace(/-/g, '/'));
                     if (entryDate >= weekStart && entryDate <= weekEnd) {
-                        weeklyPresent.add(athlete.name);
+                        weeklyPresent.add(fullName);
                     }
                     if (entryDate >= monthStart && entryDate <= monthEnd) {
-                        monthlyPresent.add(athlete.name);
+                        monthlyPresent.add(fullName);
                     }
                 }
             }
@@ -538,7 +546,14 @@ function renderRoster() {
 
     const athletesInClass = allAthletesData
         .filter(athlete => String(athlete.class) === currentClass) // Ensure comparison is string-to-string
-        .sort((a, b) => a.name.localeCompare(b.name));
+        // CHANGED: Sort by surname, then first name.
+        .sort((a, b) => {
+            if (a.surname < b.surname) return -1;
+            if (a.surname > b.surname) return 1;
+            if (a.firstName < b.firstName) return -1;
+            if (a.firstName > b.firstName) return 1;
+            return 0;
+        });
 
     if (athletesInClass.length === 0) {
         rosterContent.innerHTML = `<p class="text-stone-500 italic p-4 text-center">No athletes found for this class.</p>`;
@@ -555,10 +570,15 @@ function renderRoster() {
         return `
             <div class="athlete-row">
                 <div title="${paymentTitle}" class="payment-status ${paymentClass}"></div>
-                <div class="athlete-name">${athlete.name}</div>
+                <!-- CHANGED: Display both first name and surname -->
+                <div class="athlete-name">${athlete.firstName} ${athlete.surname}</div>
                 <div class="toggle-container flex items-center">
                     <label class="attendance-toggle">
-                        <input type="checkbox" class="attendance-checkbox" data-name="${athlete.name}" ${isPresentToday ? 'checked' : ''}>
+                        <!-- CHANGED: Added data attributes for both names -->
+                        <input type="checkbox" class="attendance-checkbox" 
+                               data-firstname="${athlete.firstName}" 
+                               data-surname="${athlete.surname}" 
+                               ${isPresentToday ? 'checked' : ''}>
                         <span class="slider"></span>
                     </label>
                     <div class="loader"></div>
@@ -570,9 +590,11 @@ function renderRoster() {
     // Add event listeners to the new checkboxes
     rosterContent.querySelectorAll('.attendance-checkbox').forEach(checkbox => {
         checkbox.addEventListener('change', (e) => {
-            const name = e.target.dataset.name;
+            // CHANGED: Get both names from the data attributes.
+            const firstName = e.target.dataset.firstname;
+            const surname = e.target.dataset.surname;
             const isPresent = e.target.checked;
-            updateAttendance(name, isPresent, e.target);
+            updateAttendance(firstName, surname, isPresent, e.target);
         });
     });
 }
