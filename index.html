@@ -101,11 +101,20 @@
         .athlete-row:hover {
             background-color: #f8fafc; /* Slate 50 */
         }
+        .athlete-details {
+             flex-grow: 1;
+        }
         .athlete-name {
             font-weight: 600;
             font-size: 1.125rem;
             color: #1e293b; /* Slate 800 */
-            flex-grow: 1;
+        }
+        /* NEW: Attendance Percentage Style */
+        .attendance-percentage {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #475569; /* Slate 600 */
+            margin-left: 0.75rem;
         }
         .payment-status-pill {
             font-size: 0.75rem;
@@ -159,7 +168,7 @@
             transform: translateX(22px);
         }
 
-        /* --- Search Bar --- */
+        /* --- Search Bar & Action Buttons --- */
         .search-input {
             width: 100%;
             padding: 0.75rem 1rem;
@@ -173,6 +182,20 @@
             outline: none;
             border-color: #059669;
             box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.15);
+        }
+        /* NEW: Action Button Styles */
+        .action-button {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            border-radius: 0.5rem;
+            border: 1px solid #cbd5e1; /* Slate 300 */
+            background-color: #fff;
+            transition: all 0.2s;
+        }
+        .action-button:hover {
+            background-color: #f8fafc; /* Slate 50 */
+            border-color: #94a3b8; /* Slate 400 */
         }
 
         /* --- Loader --- */
@@ -219,7 +242,6 @@
 
         <!-- Main Navigation: Summary + Classes -->
         <nav class="mb-8 flex flex-wrap justify-center gap-2 sm:gap-3">
-            <!-- CHANGED: Added Summary tab -->
             <button id="nav-summary" class="nav-button">Summary</button>
             <button id="class-4-30" data-class-name="4:30" class="nav-button class-btn">4:30</button>
             <button id="class-5-30" data-class-name="5:30" class="nav-button class-btn">5:30</button>
@@ -253,6 +275,11 @@
                         <h2 id="roster-title" class="text-2xl font-bold text-slate-700">Class Roster</h2>
                         <input type="text" id="search-bar" class="search-input sm:max-w-xs" placeholder="Search for an athlete...">
                     </div>
+                    <!-- NEW: Action buttons container -->
+                    <div id="roster-actions" class="flex items-center gap-2 mb-4 p-2 bg-slate-50 rounded-lg">
+                         <button id="mark-all-present" class="action-button">Mark All Present</button>
+                         <button id="clear-all" class="action-button">Clear All</button>
+                    </div>
                     <div id="class-roster-content" class="bg-white rounded-lg border border-slate-200">
                         <!-- Athlete rows will be injected here -->
                     </div>
@@ -278,27 +305,17 @@ const contentWrapper = document.getElementById('content-wrapper');
 const loadDataButton = document.getElementById('loadDataButton');
 const loginLoadingMessageDiv = document.getElementById('login-loading-message');
 const searchBar = document.getElementById('search-bar');
-// CHANGED: Added references for new containers and buttons
 const statsContainer = document.getElementById('stats-container');
 const rosterContainer = document.getElementById('roster-container');
 const summaryNavButton = document.getElementById('nav-summary');
 const classNavButtons = document.querySelectorAll('.class-btn');
+// NEW: Action button references
+const markAllPresentBtn = document.getElementById('mark-all-present');
+const clearAllBtn = document.getElementById('clear-all');
 
 
 // --- DATE HELPERS ---
 const getTodayString = () => new Date().toISOString().slice(0, 10);
-const getWeekStartEnd = () => {
-    const now = new Date();
-    const dayOfWeek = now.getDay();
-    const start = new Date(now);
-    const diff = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
-    start.setDate(now.getDate() + diff);
-    start.setHours(0, 0, 0, 0);
-    const end = new Date(start);
-    end.setDate(start.getDate() + 6);
-    end.setHours(23, 59, 59, 999);
-    return { start, end };
-};
 const getMonthStartEnd = () => {
     const now = new Date();
     const start = new Date(now.getFullYear(), now.getMonth(), 1);
@@ -346,7 +363,9 @@ async function updateAttendance(firstName, surname, isPresent, checkbox) {
             if (!athlete.attendance) athlete.attendance = {};
             athlete.attendance[date] = isPresent;
         }
-        calculateAndRenderStats(); // Recalculate stats in the background
+        // Re-render everything to update stats and percentages
+        calculateAndRenderStats(); 
+        renderRoster();
     } catch (error) {
         console.error('Update failed:', error);
         checkbox.checked = !isPresent;
@@ -356,8 +375,21 @@ async function updateAttendance(firstName, surname, isPresent, checkbox) {
     }
 }
 
+// NEW: Function to handle "Mark All" and "Clear All"
+function handleBulkUpdate(isPresent) {
+    const checkboxes = document.querySelectorAll('#class-roster-content .attendance-checkbox');
+    checkboxes.forEach(checkbox => {
+        // Only trigger an update if the state is different
+        if (checkbox.checked !== isPresent) {
+            checkbox.checked = isPresent;
+            // Manually trigger the change event to reuse the update logic
+            checkbox.dispatchEvent(new Event('change'));
+        }
+    });
+}
+
+
 // --- VIEW MANAGEMENT ---
-// CHANGED: Functions to explicitly show one view and hide the other
 function showRosterView() {
     statsContainer.classList.add('hidden');
     rosterContainer.classList.remove('hidden');
@@ -369,23 +401,55 @@ function showSummaryView() {
 }
 
 
-// --- RENDERING FUNCTIONS ---
+// --- RENDERING & CALCULATION FUNCTIONS ---
 function setActiveNav(activeId) {
     document.querySelectorAll('.nav-button').forEach(btn => {
         btn.classList.toggle('active', btn.id === activeId);
     });
 }
 
+// NEW: Calculates monthly attendance percentage for a single athlete
+function calculateMonthlyAttendance(athlete) {
+    const { start: monthStart, end: monthEnd } = getMonthStartEnd();
+    const today = new Date();
+    
+    // Find all unique session dates in the current month up to today
+    const allSessionDatesThisMonth = new Set();
+    allAthletesData.forEach(ath => {
+        if (ath.attendance) {
+            for (const dateStr in ath.attendance) {
+                const entryDate = new Date(dateStr.replace(/-/g, '/'));
+                if (entryDate >= monthStart && entryDate <= today) {
+                    allSessionDatesThisMonth.add(dateStr);
+                }
+            }
+        }
+    });
+
+    const totalSessions = allSessionDatesThisMonth.size;
+    if (totalSessions === 0) return "100%"; // If no sessions yet, they are 100% compliant
+
+    let attendedSessions = 0;
+    if (athlete.attendance) {
+        allSessionDatesThisMonth.forEach(dateStr => {
+            if (athlete.attendance[dateStr]) {
+                attendedSessions++;
+            }
+        });
+    }
+
+    return `${Math.round((attendedSessions / totalSessions) * 100)}%`;
+}
+
+
 function calculateAndRenderStats() {
     const statsGrid = document.getElementById('stats-grid-content');
     if (!statsGrid) return;
 
     const todayStr = getTodayString();
-    const { start: weekStart, end: weekEnd } = getWeekStartEnd();
-    const { start: monthStart, end: monthEnd } = getMonthStartEnd();
-
+    const { start: monthStart } = getMonthStartEnd();
+    
     const dailyPresent = new Set();
-    const weeklyPresent = new Set();
     const monthlyPresent = new Set();
 
     allAthletesData.forEach(athlete => {
@@ -395,8 +459,9 @@ function calculateAndRenderStats() {
         for (const dateStr in athlete.attendance) {
             if (athlete.attendance[dateStr]) {
                 const entryDate = new Date(dateStr.replace(/-/g, '/'));
-                if (entryDate >= weekStart && entryDate <= weekEnd) weeklyPresent.add(fullName);
-                if (entryDate >= monthStart && entryDate <= monthEnd) monthlyPresent.add(fullName);
+                if (entryDate >= monthStart) {
+                    monthlyPresent.add(fullName);
+                }
             }
         }
     });
@@ -408,13 +473,6 @@ function calculateAndRenderStats() {
             </div>
             <div class="stat-value text-blue-600">${dailyPresent.size}</div>
             <div class="stat-label">Present Today</div>
-        </div>
-        <div class="stat-item">
-            <div class="stat-icon bg-amber-500">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0h18M12 12.75h.008v.008H12v-.008z" /></svg>
-            </div>
-            <div class="stat-value text-amber-600">${weeklyPresent.size}</div>
-            <div class="stat-label">Unique This Week</div>
         </div>
         <div class="stat-item">
             <div class="stat-icon bg-violet-500">
@@ -442,7 +500,7 @@ function renderRoster() {
         .sort((a, b) => a.surname.localeCompare(b.surname) || a.firstName.localeCompare(b.firstName));
 
     if (athletesInClass.length === 0) {
-        rosterContent.innerHTML = `<p class="text-slate-500 italic p-6 text-center">No athletes found for this class.</p>`;
+        rosterContent.innerHTML = `<p class="text-slate-500 italic p-6 text-center">No athletes found.</p>`;
         return;
     }
 
@@ -452,11 +510,16 @@ function renderRoster() {
         const paymentClass = isPaid ? 'payment-status-paid' : 'payment-status-unpaid';
         const paymentText = isPaid ? 'Paid' : 'Unpaid';
         const isPresentToday = athlete.attendance && athlete.attendance[today];
+        // NEW: Calculate and get percentage
+        const attendancePercentage = calculateMonthlyAttendance(athlete);
 
         return `
             <div class="athlete-row">
                 <div class="payment-status-pill ${paymentClass}">${paymentText}</div>
-                <div class="athlete-name">${athlete.firstName} ${athlete.surname}</div>
+                <div class="athlete-details">
+                    <span class="athlete-name">${athlete.firstName} ${athlete.surname}</span>
+                    <span class="attendance-percentage">${attendancePercentage}</span>
+                </div>
                 <div class="toggle-container flex items-center">
                     <label class="attendance-toggle">
                         <input type="checkbox" class="attendance-checkbox" 
@@ -486,7 +549,6 @@ function initializeApp() {
     mainAppWrapper.classList.remove('hidden');
     loginContainer.classList.add('hidden');
 
-    // CHANGED: Set up event listeners for new tabbed navigation
     summaryNavButton.addEventListener('click', () => {
         setActiveNav('nav-summary');
         showSummaryView();
@@ -495,7 +557,7 @@ function initializeApp() {
     classNavButtons.forEach(button => {
         button.addEventListener('click', () => {
             currentClass = button.dataset.className;
-            searchBar.value = ''; // Clear search when changing class
+            searchBar.value = '';
             setActiveNav(button.id);
             renderRoster();
             showRosterView();
@@ -503,6 +565,11 @@ function initializeApp() {
     });
     
     searchBar.addEventListener('input', renderRoster);
+    
+    // NEW: Add event listeners for action buttons
+    markAllPresentBtn.addEventListener('click', () => handleBulkUpdate(true));
+    clearAllBtn.addEventListener('click', () => handleBulkUpdate(false));
+
 
     document.getElementById('current-date-display').textContent = new Date().toLocaleDateString(undefined, {
         weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
@@ -512,7 +579,7 @@ function initializeApp() {
     setActiveNav(`class-${currentClass.replace(':', '-')}`);
     calculateAndRenderStats();
     renderRoster();
-    showRosterView(); // Start on the roster view by default
+    showRosterView();
 }
 
 async function handleLoadData() {
