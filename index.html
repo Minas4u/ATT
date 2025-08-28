@@ -77,7 +77,6 @@
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
-            /* CHANGED: Standardized button width and centering */
             min-width: 140px;
             justify-content: center;
         }
@@ -107,20 +106,49 @@
         .class-button.active-purple { background-color: #a78bfa; color: white; border-color: #7c3aed; }
         .class-button.active-red { background-color: #f87171; color: white; border-color: #dc2626; }
         .class-button.active-green { background-color: #4ade80; color: white; border-color: #16a34a; }
-
-        .athlete-row {
+        
+        .roster-header, .athlete-row {
             display: flex;
             align-items: center;
-            padding: 1rem 0.5rem;
+            padding: 0.75rem 0.5rem;
             border-bottom: 1px solid #e2e8f0;
+        }
+        .roster-header {
+            font-weight: 700;
+            color: #475569;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border-bottom-width: 2px;
         }
         .athlete-row:last-child { border-bottom: none; }
         .athlete-row:hover { background-color: #f8fafc; }
         
-        .athlete-name {
-            font-weight: 600;
+        .athlete-status {
+            display: flex;
+            align-items: center;
+            flex-basis: 140px;
+            flex-shrink: 0;
+        }
+        .athlete-name-container {
+            display: flex;
+            align-items: center;
+            flex-grow: 1;
+        }
+        .athlete-surname, .athlete-firstname {
             font-size: 1.125rem;
+        }
+        /* CHANGED: Adjusted spacing for name columns */
+        .athlete-surname {
+            font-weight: 600;
             color: #1e293b;
+            flex-basis: 40%;
+            padding-right: 0.5rem;
+        }
+        .athlete-firstname {
+            font-weight: 400;
+            color: #334155;
+            flex-basis: 60%;
         }
         .attendance-percentage {
             font-size: 0.875rem;
@@ -260,7 +288,6 @@
     <div id="main-app-wrapper" class="main-container hidden">
         <header class="mb-6 pb-6 text-center">
             <h1 class="helios-title">ΗΛΙΟΣ</h1>
-            <!-- CHANGED: Container for date and monthly counter -->
             <div class="flex justify-center items-center flex-wrap gap-x-4 gap-y-2 mt-4">
                 <p class="text-slate-500 text-lg" id="current-date-display"></p>
                 <div id="monthly-counter" class="hidden bg-violet-100 text-violet-800 text-sm font-bold px-3 py-1 rounded-full">
@@ -329,7 +356,6 @@ const categoryNav = document.getElementById('category-nav');
 const classNav = document.getElementById('class-nav');
 const markAllPresentBtn = document.getElementById('mark-all-present');
 const clearAllBtn = document.getElementById('clear-all');
-// CHANGED: Added counter reference
 const monthlyCounter = document.getElementById('monthly-counter');
 const monthlyUniqueCountSpan = document.getElementById('monthly-unique-count');
 
@@ -381,7 +407,7 @@ async function updateAttendance(firstName, surname, isPresent, checkbox) {
             athlete.attendance[date] = isPresent;
         }
         renderRoster();
-        updateMonthlyCounter(); // Update counter after attendance change
+        updateMonthlyCounter();
     } catch (error) {
         console.error('Update failed:', error);
         checkbox.checked = !isPresent;
@@ -402,7 +428,6 @@ function handleBulkUpdate(isPresent) {
 
 // --- RENDERING & NAVIGATION ---
 function renderNavigation() {
-    // Category Buttons
     let navHTML = Object.keys(CATEGORIES).map(cat => {
         const color = CATEGORIES[cat].color;
         const activeClass = currentCategory === cat ? `active-${color}` : '';
@@ -410,7 +435,6 @@ function renderNavigation() {
         return `<button class="nav-button category-btn ${frameClass} ${activeClass}" data-category="${cat}">${cat}</button>`;
     }).join('');
     
-    // Universal Search Button
     const searchButtonActiveClass = currentCategory === 'ALL' ? 'active-gray' : '';
     navHTML += `<button class="nav-button frame-gray ${searchButtonActiveClass}" id="search-all-btn" data-category="ALL">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" /></svg>
@@ -426,7 +450,6 @@ function renderNavigation() {
         renderClassButtons();
     }
 
-    // Add event listeners
     document.getElementById('search-all-btn').addEventListener('click', () => {
         currentCategory = 'ALL';
         currentClass = null;
@@ -464,7 +487,6 @@ function renderClassButtons() {
     });
 }
 
-// CHANGED: Renamed function to be more specific
 function updateMonthlyCounter() {
     const { start: monthStart } = getMonthStartEnd();
     const monthlyPresent = new Set();
@@ -535,13 +557,24 @@ function renderRoster() {
     
     athletesToDisplay.sort((a, b) => a.surname.localeCompare(b.surname) || a.firstName.localeCompare(b.firstName));
 
+    const headerHTML = `
+        <div class="roster-header">
+            <div class="athlete-status"></div>
+            <div class="athlete-name-container">
+                <div class="athlete-surname">ΕΠΙΘΕΤΟ</div>
+                <div class="athlete-firstname">ΟΝΟΜΑ</div>
+            </div>
+            <div class="flex-shrink-0" style="width: 70px;"></div>
+        </div>
+    `;
+
     if (athletesToDisplay.length === 0) {
-        rosterContent.innerHTML = `<p class="text-slate-500 italic p-6 text-center">No athletes found.</p>`;
+        rosterContent.innerHTML = headerHTML + `<p class="text-slate-500 italic p-6 text-center">No athletes found.</p>`;
         return;
     }
 
     const today = getTodayString();
-    rosterContent.innerHTML = athletesToDisplay.map(athlete => {
+    const athletesHTML = athletesToDisplay.map(athlete => {
         const isPaid = String(athlete.paymentStatus).toLowerCase() === 'paid';
         const healthStatus = String(athlete.health).toUpperCase();
         const isPresentToday = athlete.attendance && athlete.attendance[today];
@@ -549,11 +582,16 @@ function renderRoster() {
 
         return `
             <div class="athlete-row">
-                <div class="payment-status-pill ${isPaid ? 'payment-status-paid' : 'payment-status-unpaid'}">${isPaid ? 'Paid' : 'Unpaid'}</div>
-                <div class="health-status-dot ${healthStatus === 'Y' ? 'health-status-y' : 'health-status-n'}" title="Health Status: ${healthStatus}"></div>
-                <div class="flex-grow">
-                    <span class="athlete-name">${athlete.firstName} ${athlete.surname}</span>
-                    <span class="attendance-percentage">${attendancePercentage}</span>
+                <div class="athlete-status">
+                    <div class="payment-status-pill ${isPaid ? 'payment-status-paid' : 'payment-status-unpaid'}">${isPaid ? 'Paid' : 'Unpaid'}</div>
+                    <div class="health-status-dot ${healthStatus === 'Y' ? 'health-status-y' : 'health-status-n'}" title="Health Status: ${healthStatus}"></div>
+                </div>
+                <div class="athlete-name-container">
+                    <div class="athlete-surname">${athlete.surname}</div>
+                    <div class="athlete-firstname">
+                        ${athlete.firstName}
+                        <span class="attendance-percentage">${attendancePercentage}</span>
+                    </div>
                 </div>
                 <div class="toggle-container flex items-center">
                     <label class="attendance-toggle">
@@ -567,6 +605,8 @@ function renderRoster() {
             </div>
         `;
     }).join('');
+
+    rosterContent.innerHTML = headerHTML + athletesHTML;
 
     rosterContent.querySelectorAll('.attendance-checkbox').forEach(checkbox => {
         checkbox.addEventListener('change', (e) => {
@@ -591,7 +631,6 @@ function initializeApp() {
         weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
     });
     
-    // Initial render
     updateMonthlyCounter();
     renderNavigation();
     renderRoster();
