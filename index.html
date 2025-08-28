@@ -7,12 +7,12 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f1f5f9; /* Slate 100 */
-            color: #334155; /* Slate 700 */
+            background-color: #f1f5f9;
+            color: #334155;
         }
         .main-container {
             background-color: #ffffff;
@@ -23,97 +23,94 @@
             padding: 1.5rem;
             margin: 2rem auto;
         }
-        @media (min-width: 640px) {
-            .main-container {
-                padding: 2rem;
-            }
-        }
+        @media (min-width: 640px) { .main-container { padding: 2rem; } }
         
-        /* --- Redesigned Navigation --- */
+        /* CHANGED: New Login Screen Style */
+        #login-container {
+            background-image: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
+            border: 4px solid white;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .login-title {
+            font-weight: 800;
+            color: #1e3a8a; /* Dark Blue */
+            text-shadow: 1px 1px 2px rgba(255,255,255,0.5);
+        }
+        .login-button {
+            background-color: #ffffff;
+            color: #1e3a8a;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: all 0.2s ease-in-out;
+        }
+        .login-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 7px 10px rgba(0,0,0,0.1);
+        }
+
+
+        .helios-title {
+            font-weight: 800;
+            font-size: 2.5rem;
+            color: #f59e0b; /* Orangish-yellow */
+            background-color: #2563eb; /* Blue */
+            padding: 0.5rem 1.5rem;
+            border-radius: 0.5rem;
+            display: inline-block;
+            border: 3px solid #1d4ed8; /* Darker blue border */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+        @media (min-width: 640px) { .helios-title { font-size: 3.5rem; } }
+
+        /* --- Navigation Buttons --- */
         .nav-button {
             padding: 0.5rem 1rem;
             border-radius: 0.5rem;
             transition: all 0.2s ease-in-out;
             font-weight: 600;
             border: 2px solid transparent;
-            background-color: #f1f5f9; /* Slate 100 */
-            color: #475569; /* Slate 600 */
+            background-color: #f1f5f9;
+            color: #475569;
         }
         .nav-button:hover:not(.active) {
-            background-color: #e2e8f0; /* Slate 200 */
-            color: #1e293b; /* Slate 800 */
+            background-color: #e2e8f0;
+            color: #1e293b;
         }
-        .nav-button.active {
-            background-color: #059669; /* Emerald 600 */
-            color: white;
-            box-shadow: 0 4px 14px 0 rgba(5, 150, 105, 0.25);
-        }
+        
+        .nav-button.active-blue { background-color: #3b82f6; color: white; box-shadow: 0 4px 14px 0 rgba(59, 130, 246, 0.3); }
+        .nav-button.active-yellow { background-color: #f59e0b; color: white; box-shadow: 0 4px 14px 0 rgba(245, 158, 11, 0.3); }
+        .nav-button.active-purple { background-color: #8b5cf6; color: white; box-shadow: 0 4px 14px 0 rgba(139, 92, 246, 0.3); }
+        .nav-button.active-red { background-color: #ef4444; color: white; box-shadow: 0 4px 14px 0 rgba(239, 68, 68, 0.3); }
+        .nav-button.active-green { background-color: #22c55e; color: white; box-shadow: 0 4px 14px 0 rgba(34, 197, 94, 0.3); }
 
-        /* --- Redesigned Stat Cards --- */
-        .stat-item {
-            background-color: #f8fafc; /* Slate 50 */
-            padding: 1.5rem;
-            border-radius: 0.75rem;
-            text-align: center;
-            border: 1px solid #e2e8f0; /* Slate 200 */
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
+        .class-button {
+             background-color: #f8fafc;
+             border: 1px solid #e2e8f0;
         }
-        .stat-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 0.5rem;
-        }
-        .stat-icon svg {
-            width: 24px;
-            height: 24px;
-            color: white;
-        }
-        .stat-value {
-            font-size: 2.5rem;
-            font-weight: 700;
-            line-height: 1;
-        }
-        .stat-label {
-            font-size: 0.875rem;
-            font-weight: 500;
-            color: #64748b; /* Slate 500 */
-        }
+        .class-button.active-blue { background-color: #60a5fa; color: white; border-color: #3b82f6; }
+        .class-button.active-yellow { background-color: #fbbf24; color: white; border-color: #f59e0b; }
+        .class-button.active-purple { background-color: #a78bfa; color: white; border-color: #8b5cf6; }
+        .class-button.active-red { background-color: #f87171; color: white; border-color: #ef4444; }
+        .class-button.active-green { background-color: #4ade80; color: white; border-color: #22c55e; }
 
-        /* --- Redesigned Roster --- */
         .athlete-row {
             display: flex;
             align-items: center;
             padding: 1rem 0.5rem;
-            border-bottom: 1px solid #e2e8f0; /* Slate 200 */
-            transition: background-color 0.2s;
+            border-bottom: 1px solid #e2e8f0;
         }
-        .athlete-row:last-child {
-            border-bottom: none;
-        }
-        .athlete-row:hover {
-            background-color: #f8fafc; /* Slate 50 */
-        }
-        .athlete-details {
-             flex-grow: 1;
-        }
+        .athlete-row:last-child { border-bottom: none; }
+        .athlete-row:hover { background-color: #f8fafc; }
+        
         .athlete-name {
             font-weight: 600;
             font-size: 1.125rem;
-            color: #1e293b; /* Slate 800 */
+            color: #1e293b;
         }
-        /* NEW: Attendance Percentage Style */
         .attendance-percentage {
             font-size: 0.875rem;
             font-weight: 500;
-            color: #475569; /* Slate 600 */
+            color: #475569;
             margin-left: 0.75rem;
         }
         .payment-status-pill {
@@ -123,23 +120,26 @@
             border-radius: 9999px;
             text-transform: uppercase;
             letter-spacing: 0.05em;
-            margin-right: 1rem;
+            margin-right: 0.5rem;
         }
-        .payment-status-paid {
-            background-color: #dcfce7; /* Green 100 */
-            color: #166534; /* Green 800 */
-        }
-        .payment-status-unpaid {
-            background-color: #fee2e2; /* Red 100 */
-            color: #991b1b; /* Red 800 */
-        }
+        .payment-status-paid { background-color: #dcfce7; color: #166534; }
+        .payment-status-unpaid { background-color: #fee2e2; color: #991b1b; }
 
-        /* --- Redesigned Toggle Switch --- */
+        .health-status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 1rem;
+            flex-shrink: 0;
+        }
+        .health-status-y { background-color: #22c55e; }
+        .health-status-n { background-color: #ef4444; }
+
         .attendance-toggle {
             position: relative;
             display: inline-block;
-            width: 52px;
-            height: 30px;
+            width: 70px;
+            height: 38px;
             flex-shrink: 0;
         }
         .attendance-toggle input { display: none; }
@@ -147,108 +147,108 @@
             position: absolute;
             cursor: pointer;
             top: 0; left: 0; right: 0; bottom: 0;
-            background-color: #cbd5e1; /* Slate 300 */
+            background-color: #cbd5e1;
             transition: .3s;
-            border-radius: 30px;
+            border-radius: 38px;
         }
         .slider:before {
             position: absolute;
             content: "";
-            height: 22px; width: 22px;
-            left: 4px; bottom: 4px;
+            height: 30px;
+            width: 30px;
+            left: 4px;
+            bottom: 4px;
             background-color: white;
             transition: .3s;
             border-radius: 50%;
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
         input:checked + .slider {
-            background-color: #059669; /* Emerald 600 */
+            background-color: #16a34a;
         }
         input:checked + .slider:before {
-            transform: translateX(22px);
+            transform: translateX(32px);
         }
 
-        /* --- Search Bar & Action Buttons --- */
         .search-input {
             width: 100%;
             padding: 0.75rem 1rem;
             font-size: 1rem;
             border-radius: 0.5rem;
-            border: 1px solid #cbd5e1; /* Slate 300 */
-            background-color: #f8fafc; /* Slate 50 */
-            transition: border-color 0.2s, box-shadow 0.2s;
+            border: 1px solid #cbd5e1;
+            background-color: #f8fafc;
         }
         .search-input:focus {
             outline: none;
             border-color: #059669;
             box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.15);
         }
-        /* NEW: Action Button Styles */
         .action-button {
             padding: 0.5rem 1rem;
             font-size: 0.875rem;
             font-weight: 600;
             border-radius: 0.5rem;
-            border: 1px solid #cbd5e1; /* Slate 300 */
+            border: 1px solid #cbd5e1;
             background-color: #fff;
             transition: all 0.2s;
         }
-        .action-button:hover {
-            background-color: #f8fafc; /* Slate 50 */
-            border-color: #94a3b8; /* Slate 400 */
+        .action-button:hover { background-color: #f8fafc; border-color: #94a3b8; }
+
+        .roster-title-frame {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.75rem;
+            padding: 0.75rem 1.25rem;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        #roster-title {
+            font-weight: 700;
+            color: #1e293b;
         }
 
-        /* --- Loader --- */
         .loader {
             border: 3px solid #e2e8f0;
-            border-top: 3px solid #059669;
+            border-top: 3px solid #1e3a8a; /* Match login screen text color */
             border-radius: 50%;
             width: 24px;
             height: 24px;
             animation: spin 1s linear infinite;
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .hidden { display: none !important; }
     </style>
 </head>
 <body class="p-4">
 
-    <!-- Login Screen -->
     <div id="login-container" class="main-container max-w-md">
         <header class="mb-8 text-center">
-            <h1 class="text-3xl sm:text-4xl font-bold text-slate-800">
-                Attendance Tracker
-            </h1>
-            <p class="text-slate-500 mt-2">Please load the roster to begin.</p>
+            <h1 class="text-4xl sm:text-5xl login-title">Παρουσιολόγιο</h1>
+            <p class="text-blue-900 mt-2 font-medium">Welcome! Let's get started.</p>
         </header>
         <div class="space-y-4">
-            <button id="loadDataButton" class="w-full flex justify-center items-center gap-2 py-3 px-4 border border-transparent rounded-lg shadow-sm text-lg font-semibold text-white bg-emerald-600 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 transition-all">
+            <button id="loadDataButton" class="w-full flex justify-center items-center gap-2 py-3 px-4 border border-transparent rounded-lg text-lg font-semibold login-button">
                 Load Roster
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
             </button>
-            <div id="login-loading-message" class="hidden message-center flex flex-col items-center gap-2 text-slate-600">
+            <div id="login-loading-message" class="hidden flex flex-col items-center gap-2 text-blue-900 font-semibold">
                 <div class="loader"></div>
                 <span>Loading...</span>
             </div>
         </div>
     </div>
 
-    <!-- Main Application Wrapper -->
     <div id="main-app-wrapper" class="main-container hidden">
-        <header class="mb-6 pb-6 border-b border-slate-200">
-            <h1 class="text-3xl sm:text-4xl font-bold text-slate-800 text-center">
-                Class Attendance
-            </h1>
-            <p class="text-slate-500 mt-2 text-lg text-center" id="current-date-display"></p>
+        <header class="mb-6 pb-6 border-b border-slate-200 text-center">
+            <h1 class="helios-title">ΗΛΙΟΣ</h1>
+            <p class="text-slate-500 mt-4 text-lg" id="current-date-display"></p>
         </header>
 
-        <!-- Main Navigation: Summary + Classes -->
-        <nav class="mb-8 flex flex-wrap justify-center gap-2 sm:gap-3">
-            <button id="nav-summary" class="nav-button">Summary</button>
-            <button id="class-4-30" data-class-name="4:30" class="nav-button class-btn">4:30</button>
-            <button id="class-5-30" data-class-name="5:30" class="nav-button class-btn">5:30</button>
-            <button id="class-6-30" data-class-name="6:30" class="nav-button class-btn">6:30</button>
-            <button id="class-7-00" data-class-name="7:00" class="nav-button class-btn">7:00</button>
-            <button id="class-7-15" data-class-name="7:15" class="nav-button class-btn">7:15</button>
-            <button id="class-8-00" data-class-name="8:00" class="nav-button class-btn">8:00</button>
+        <nav class="mb-4 space-y-4">
+            <div id="category-nav" class="flex flex-wrap justify-center gap-2 sm:gap-3"></div>
+            <div id="class-nav" class="flex flex-wrap justify-center gap-2 sm:gap-3 border-t border-slate-200 pt-4"></div>
         </nav>
 
         <main id="app-content">
@@ -258,31 +258,19 @@
             </div>
             <div id="error-message" class="hidden text-center p-4 bg-red-100 text-red-800 rounded-lg"></div>
 
-            <!-- Content Area: Toggled between Summary and Roster -->
             <div id="content-wrapper" class="hidden">
-                
-                <!-- Summary View -->
-                <section id="stats-container" class="hidden">
-                     <h2 class="text-2xl font-bold text-slate-700 mb-4">Attendance Summary</h2>
-                     <div id="stats-grid-content" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                        <!-- Stat items will be injected here -->
+                 <section id="roster-container">
+                    <div class="roster-title-frame">
+                        <h2 id="roster-title" class="text-2xl"></h2>
                     </div>
-                </section>
-
-                <!-- Roster View -->
-                <section id="roster-container" class="hidden">
                     <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 gap-4">
-                        <h2 id="roster-title" class="text-2xl font-bold text-slate-700">Class Roster</h2>
+                        <div id="roster-actions" class="flex items-center gap-2 p-2 bg-slate-50 rounded-lg">
+                             <button id="mark-all-present" class="action-button">Mark All Present</button>
+                             <button id="clear-all" class="action-button">Clear All</button>
+                        </div>
                         <input type="text" id="search-bar" class="search-input sm:max-w-xs" placeholder="Search for an athlete...">
                     </div>
-                    <!-- NEW: Action buttons container -->
-                    <div id="roster-actions" class="flex items-center gap-2 mb-4 p-2 bg-slate-50 rounded-lg">
-                         <button id="mark-all-present" class="action-button">Mark All Present</button>
-                         <button id="clear-all" class="action-button">Clear All</button>
-                    </div>
-                    <div id="class-roster-content" class="bg-white rounded-lg border border-slate-200">
-                        <!-- Athlete rows will be injected here -->
-                    </div>
+                    <div id="class-roster-content" class="bg-white rounded-lg border border-slate-200"></div>
                 </section>
             </div>
         </main>
@@ -290,11 +278,20 @@
 
 <script>
 // --- CONFIGURATION ---
-const GOOGLE_SHEET_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyDqp_Jxx0IBEipErg0zjmAyCI1ksAJK3t9lXSTo2bsHUaekxG51enh5-eyZoZSJw7S4w/exec";
+const GOOGLE_SHEET_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwma1xxbqgwa36aPe3vz7OLs5QaLUcUiqpS-6DOR33NPlqSaNXHmkxVa8uQXG_GvvzeIA/exec";
+
+const CATEGORIES = {
+    'Ακαδημίες':      { classes: ['5:00', '6:00', '6:00β'], color: 'blue' },
+    'Προαγωνιστικό': { classes: ['Α', 'Β'],              color: 'yellow' },
+    'Αγωνιστικό':    { classes: ['R'],                   color: 'purple' },
+    'Υποψήφιοι':     { classes: ['ΤΕΦΑΑ', 'ΣΤΡ/ΣΑ'],      color: 'red' },
+    'Αθλούμενοι':    { classes: ['Ενήλικες', 'Δρομείς'],  color: 'green' }
+};
 
 // --- GLOBAL STATE ---
 let allAthletesData = [];
-let currentClass = "4:30";
+let currentCategory = Object.keys(CATEGORIES)[0];
+let currentClass = CATEGORIES[currentCategory].classes[0];
 
 // --- DOM ELEMENT REFERENCES ---
 const loginContainer = document.getElementById('login-container');
@@ -305,23 +302,17 @@ const contentWrapper = document.getElementById('content-wrapper');
 const loadDataButton = document.getElementById('loadDataButton');
 const loginLoadingMessageDiv = document.getElementById('login-loading-message');
 const searchBar = document.getElementById('search-bar');
-const statsContainer = document.getElementById('stats-container');
-const rosterContainer = document.getElementById('roster-container');
-const summaryNavButton = document.getElementById('nav-summary');
-const classNavButtons = document.querySelectorAll('.class-btn');
-// NEW: Action button references
+const categoryNav = document.getElementById('category-nav');
+const classNav = document.getElementById('class-nav');
 const markAllPresentBtn = document.getElementById('mark-all-present');
 const clearAllBtn = document.getElementById('clear-all');
-
 
 // --- DATE HELPERS ---
 const getTodayString = () => new Date().toISOString().slice(0, 10);
 const getMonthStartEnd = () => {
     const now = new Date();
     const start = new Date(now.getFullYear(), now.getMonth(), 1);
-    const end = new Date(now.getFullYear(), now.getMonth() + 1, 0);
-    end.setHours(23, 59, 59, 999);
-    return { start, end };
+    return { start };
 };
 
 // --- DATA FETCHING & UPDATING ---
@@ -338,7 +329,7 @@ async function fetchData() {
         initializeApp();
     } catch (error) {
         console.error('Failed to fetch data:', error);
-        errorMessageDiv.textContent = `Error loading data: ${error.message}. Please check your sheet columns and redeploy the script.`;
+        errorMessageDiv.textContent = `Error: ${error.message}. Check sheet columns and redeploy script.`;
         loadingMessageDiv.classList.add('hidden');
         errorMessageDiv.classList.remove('hidden');
     }
@@ -346,74 +337,82 @@ async function fetchData() {
 
 async function updateAttendance(firstName, surname, isPresent, checkbox) {
     const date = getTodayString();
-    const toggleContainer = checkbox.closest('.toggle-container');
-    const loader = toggleContainer.querySelector('.loader');
+    const loader = checkbox.closest('.toggle-container').querySelector('.loader');
     loader.style.display = 'inline-block';
     try {
         const response = await fetch(GOOGLE_SHEET_WEB_APP_URL, {
             method: 'POST',
             body: JSON.stringify({ firstName, surname, date, status: isPresent ? 'Present' : '' }),
         });
-        if (!response.ok) throw new Error('Network error during update.');
+        if (!response.ok) throw new Error('Network error.');
         const result = await response.json();
-        if (result.status !== 'success') throw new Error(result.message || 'Unknown server error.');
+        if (result.status !== 'success') throw new Error(result.message);
         
         const athlete = allAthletesData.find(a => a.firstName === firstName && a.surname === surname);
         if (athlete) {
             if (!athlete.attendance) athlete.attendance = {};
             athlete.attendance[date] = isPresent;
         }
-        // Re-render everything to update stats and percentages
-        calculateAndRenderStats(); 
         renderRoster();
     } catch (error) {
         console.error('Update failed:', error);
         checkbox.checked = !isPresent;
-        alert(`Failed to update attendance for ${firstName} ${surname}. Please try again.`);
+        alert(`Failed to update attendance for ${firstName} ${surname}.`);
     } finally {
         loader.style.display = 'none';
     }
 }
 
-// NEW: Function to handle "Mark All" and "Clear All"
 function handleBulkUpdate(isPresent) {
-    const checkboxes = document.querySelectorAll('#class-roster-content .attendance-checkbox');
-    checkboxes.forEach(checkbox => {
-        // Only trigger an update if the state is different
+    document.querySelectorAll('#class-roster-content .attendance-checkbox').forEach(checkbox => {
         if (checkbox.checked !== isPresent) {
             checkbox.checked = isPresent;
-            // Manually trigger the change event to reuse the update logic
             checkbox.dispatchEvent(new Event('change'));
         }
     });
 }
 
+// --- RENDERING & NAVIGATION ---
+function renderNavigation() {
+    categoryNav.innerHTML = Object.keys(CATEGORIES).map(cat => {
+        const color = CATEGORIES[cat].color;
+        const activeClass = cat === currentCategory ? `active-${color}` : '';
+        return `<button class="nav-button category-btn ${activeClass}" data-category="${cat}">${cat}</button>`;
+    }).join('');
+    
+    renderClassButtons();
 
-// --- VIEW MANAGEMENT ---
-function showRosterView() {
-    statsContainer.classList.add('hidden');
-    rosterContainer.classList.remove('hidden');
-}
-
-function showSummaryView() {
-    rosterContainer.classList.add('hidden');
-    statsContainer.classList.remove('hidden');
-}
-
-
-// --- RENDERING & CALCULATION FUNCTIONS ---
-function setActiveNav(activeId) {
-    document.querySelectorAll('.nav-button').forEach(btn => {
-        btn.classList.toggle('active', btn.id === activeId);
+    document.querySelectorAll('.category-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            currentCategory = e.target.dataset.category;
+            currentClass = CATEGORIES[currentCategory].classes[0];
+            searchBar.value = '';
+            renderNavigation();
+            renderRoster();
+        });
     });
 }
 
-// NEW: Calculates monthly attendance percentage for a single athlete
+function renderClassButtons() {
+    const categoryColor = CATEGORIES[currentCategory].color;
+    classNav.innerHTML = CATEGORIES[currentCategory].classes.map(cls => {
+        const activeClass = cls === currentClass ? `active-${categoryColor}` : '';
+        return `<button class="nav-button class-button ${activeClass}" data-class="${cls}">${cls}</button>`;
+    }).join('');
+
+    document.querySelectorAll('.class-button').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            currentClass = e.target.dataset.class;
+            searchBar.value = '';
+            renderClassButtons();
+            renderRoster();
+        });
+    });
+}
+
 function calculateMonthlyAttendance(athlete) {
-    const { start: monthStart, end: monthEnd } = getMonthStartEnd();
+    const { start: monthStart } = getMonthStartEnd();
     const today = new Date();
-    
-    // Find all unique session dates in the current month up to today
     const allSessionDatesThisMonth = new Set();
     allAthletesData.forEach(ath => {
         if (ath.attendance) {
@@ -427,76 +426,29 @@ function calculateMonthlyAttendance(athlete) {
     });
 
     const totalSessions = allSessionDatesThisMonth.size;
-    if (totalSessions === 0) return "100%"; // If no sessions yet, they are 100% compliant
+    if (totalSessions === 0) return "100%";
 
     let attendedSessions = 0;
     if (athlete.attendance) {
         allSessionDatesThisMonth.forEach(dateStr => {
-            if (athlete.attendance[dateStr]) {
-                attendedSessions++;
-            }
+            if (athlete.attendance[dateStr]) attendedSessions++;
         });
     }
-
     return `${Math.round((attendedSessions / totalSessions) * 100)}%`;
-}
-
-
-function calculateAndRenderStats() {
-    const statsGrid = document.getElementById('stats-grid-content');
-    if (!statsGrid) return;
-
-    const todayStr = getTodayString();
-    const { start: monthStart } = getMonthStartEnd();
-    
-    const dailyPresent = new Set();
-    const monthlyPresent = new Set();
-
-    allAthletesData.forEach(athlete => {
-        const fullName = `${athlete.firstName} ${athlete.surname}`;
-        if (!athlete.attendance) return;
-        if (athlete.attendance[todayStr]) dailyPresent.add(fullName);
-        for (const dateStr in athlete.attendance) {
-            if (athlete.attendance[dateStr]) {
-                const entryDate = new Date(dateStr.replace(/-/g, '/'));
-                if (entryDate >= monthStart) {
-                    monthlyPresent.add(fullName);
-                }
-            }
-        }
-    });
-
-    statsGrid.innerHTML = `
-        <div class="stat-item">
-            <div class="stat-icon bg-blue-500">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0h18M12 12.75h.008v.008H12v-.008z" /></svg>
-            </div>
-            <div class="stat-value text-blue-600">${dailyPresent.size}</div>
-            <div class="stat-label">Present Today</div>
-        </div>
-        <div class="stat-item">
-            <div class="stat-icon bg-violet-500">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0h18M12 12.75h.008v.008H12v-.008z" /></svg>
-            </div>
-            <div class="stat-value text-violet-600">${monthlyPresent.size}</div>
-            <div class="stat-label">Unique This Month</div>
-        </div>
-    `;
 }
 
 function renderRoster() {
     const rosterContent = document.getElementById('class-roster-content');
     const rosterTitle = document.getElementById('roster-title');
-    if (!rosterContent || !rosterTitle) return;
-
-    rosterTitle.textContent = `Class ${currentClass}`;
+    rosterTitle.textContent = `${currentCategory} - ${currentClass}`;
     
     const searchTerm = searchBar.value.toLowerCase();
     const athletesInClass = allAthletesData
-        .filter(athlete => {
-            const fullName = `${athlete.firstName} ${athlete.surname}`.toLowerCase();
-            return String(athlete.class) === currentClass && fullName.includes(searchTerm);
-        })
+        .filter(athlete => 
+            athlete.category === currentCategory && 
+            athlete.class === currentClass &&
+            `${athlete.firstName} ${athlete.surname}`.toLowerCase().includes(searchTerm)
+        )
         .sort((a, b) => a.surname.localeCompare(b.surname) || a.firstName.localeCompare(b.firstName));
 
     if (athletesInClass.length === 0) {
@@ -507,24 +459,22 @@ function renderRoster() {
     const today = getTodayString();
     rosterContent.innerHTML = athletesInClass.map(athlete => {
         const isPaid = String(athlete.paymentStatus).toLowerCase() === 'paid';
-        const paymentClass = isPaid ? 'payment-status-paid' : 'payment-status-unpaid';
-        const paymentText = isPaid ? 'Paid' : 'Unpaid';
+        const healthStatus = String(athlete.health).toUpperCase();
         const isPresentToday = athlete.attendance && athlete.attendance[today];
-        // NEW: Calculate and get percentage
         const attendancePercentage = calculateMonthlyAttendance(athlete);
 
         return `
             <div class="athlete-row">
-                <div class="payment-status-pill ${paymentClass}">${paymentText}</div>
-                <div class="athlete-details">
+                <div class="payment-status-pill ${isPaid ? 'payment-status-paid' : 'payment-status-unpaid'}">${isPaid ? 'Paid' : 'Unpaid'}</div>
+                <div class="health-status-dot ${healthStatus === 'Y' ? 'health-status-y' : 'health-status-n'}" title="Health Status: ${healthStatus}"></div>
+                <div class="flex-grow">
                     <span class="athlete-name">${athlete.firstName} ${athlete.surname}</span>
                     <span class="attendance-percentage">${attendancePercentage}</span>
                 </div>
                 <div class="toggle-container flex items-center">
                     <label class="attendance-toggle">
                         <input type="checkbox" class="attendance-checkbox" 
-                               data-firstname="${athlete.firstName}" 
-                               data-surname="${athlete.surname}" 
+                               data-firstname="${athlete.firstName}" data-surname="${athlete.surname}" 
                                ${isPresentToday ? 'checked' : ''}>
                         <span class="slider"></span>
                     </label>
@@ -548,38 +498,17 @@ function initializeApp() {
     contentWrapper.classList.remove('hidden');
     mainAppWrapper.classList.remove('hidden');
     loginContainer.classList.add('hidden');
-
-    summaryNavButton.addEventListener('click', () => {
-        setActiveNav('nav-summary');
-        showSummaryView();
-    });
-
-    classNavButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            currentClass = button.dataset.className;
-            searchBar.value = '';
-            setActiveNav(button.id);
-            renderRoster();
-            showRosterView();
-        });
-    });
     
     searchBar.addEventListener('input', renderRoster);
-    
-    // NEW: Add event listeners for action buttons
     markAllPresentBtn.addEventListener('click', () => handleBulkUpdate(true));
     clearAllBtn.addEventListener('click', () => handleBulkUpdate(false));
 
-
-    document.getElementById('current-date-display').textContent = new Date().toLocaleDateString(undefined, {
+    document.getElementById('current-date-display').textContent = new Date().toLocaleDateString('el-GR', {
         weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
     });
 
-    // Initial render state
-    setActiveNav(`class-${currentClass.replace(':', '-')}`);
-    calculateAndRenderStats();
+    renderNavigation();
     renderRoster();
-    showRosterView();
 }
 
 async function handleLoadData() {
