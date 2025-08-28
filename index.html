@@ -25,7 +25,6 @@
         }
         @media (min-width: 640px) { .main-container { padding: 2rem; } }
         
-        /* CHANGED: New Login Screen Style */
         #login-container {
             background-image: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
             border: 4px solid white;
@@ -47,6 +46,11 @@
             box-shadow: 0 7px 10px rgba(0,0,0,0.1);
         }
 
+        #main-app-wrapper header {
+            border-bottom: 6px solid;
+            border-image-slice: 1;
+            border-image-source: linear-gradient(to right, #3b82f6, #f59e0b);
+        }
 
         .helios-title {
             font-weight: 800;
@@ -68,30 +72,37 @@
             border-radius: 0.5rem;
             transition: all 0.2s ease-in-out;
             font-weight: 600;
-            border: 2px solid transparent;
+            border: 2px solid; /* Made border always visible */
             background-color: #f1f5f9;
-            color: #475569;
         }
         .nav-button:hover:not(.active) {
             background-color: #e2e8f0;
-            color: #1e293b;
         }
         
-        .nav-button.active-blue { background-color: #3b82f6; color: white; box-shadow: 0 4px 14px 0 rgba(59, 130, 246, 0.3); }
-        .nav-button.active-yellow { background-color: #f59e0b; color: white; box-shadow: 0 4px 14px 0 rgba(245, 158, 11, 0.3); }
-        .nav-button.active-purple { background-color: #8b5cf6; color: white; box-shadow: 0 4px 14px 0 rgba(139, 92, 246, 0.3); }
-        .nav-button.active-red { background-color: #ef4444; color: white; box-shadow: 0 4px 14px 0 rgba(239, 68, 68, 0.3); }
-        .nav-button.active-green { background-color: #22c55e; color: white; box-shadow: 0 4px 14px 0 rgba(34, 197, 94, 0.3); }
+        /* NEW: Frame-only styles for non-active buttons */
+        .frame-blue { border-color: #3b82f6; color: #3b82f6; }
+        .frame-yellow { border-color: #f59e0b; color: #f59e0b; }
+        .frame-purple { border-color: #8b5cf6; color: #8b5cf6; }
+        .frame-red { border-color: #ef4444; color: #ef4444; }
+        .frame-green { border-color: #22c55e; color: #22c55e; }
+        .frame-gray { border-color: #475569; color: #475569; }
+        
+        /* Active styles now override background and text color */
+        .nav-button.active-blue { background-color: #3b82f6; color: white; box-shadow: 0 4px 14px 0 rgba(59, 130, 246, 0.3); border-color: #1d4ed8; }
+        .nav-button.active-yellow { background-color: #f59e0b; color: white; box-shadow: 0 4px 14px 0 rgba(245, 158, 11, 0.3); border-color: #b45309; }
+        .nav-button.active-purple { background-color: #8b5cf6; color: white; box-shadow: 0 4px 14px 0 rgba(139, 92, 246, 0.3); border-color: #6d28d9; }
+        .nav-button.active-red { background-color: #ef4444; color: white; box-shadow: 0 4px 14px 0 rgba(239, 68, 68, 0.3); border-color: #b91c1c; }
+        .nav-button.active-green { background-color: #22c55e; color: white; box-shadow: 0 4px 14px 0 rgba(34, 197, 94, 0.3); border-color: #15803d; }
+        .nav-button.active-gray { background-color: #475569; color: white; box-shadow: 0 4px 14px 0 rgba(71, 85, 105, 0.3); border-color: #1e293b; }
 
         .class-button {
              background-color: #f8fafc;
-             border: 1px solid #e2e8f0;
         }
-        .class-button.active-blue { background-color: #60a5fa; color: white; border-color: #3b82f6; }
-        .class-button.active-yellow { background-color: #fbbf24; color: white; border-color: #f59e0b; }
-        .class-button.active-purple { background-color: #a78bfa; color: white; border-color: #8b5cf6; }
-        .class-button.active-red { background-color: #f87171; color: white; border-color: #ef4444; }
-        .class-button.active-green { background-color: #4ade80; color: white; border-color: #22c55e; }
+        .class-button.active-blue { background-color: #60a5fa; color: white; border-color: #2563eb; }
+        .class-button.active-yellow { background-color: #fbbf24; color: white; border-color: #d97706; }
+        .class-button.active-purple { background-color: #a78bfa; color: white; border-color: #7c3aed; }
+        .class-button.active-red { background-color: #f87171; color: white; border-color: #dc2626; }
+        .class-button.active-green { background-color: #4ade80; color: white; border-color: #16a34a; }
 
         .athlete-row {
             display: flex;
@@ -196,11 +207,13 @@
 
         .roster-title-frame {
             background-color: #f8fafc;
-            border: 1px solid #e2e8f0;
             border-radius: 0.75rem;
             padding: 0.75rem 1.25rem;
             margin-bottom: 1rem;
             text-align: center;
+            border: 4px solid;
+            border-image-slice: 1;
+            border-image-source: linear-gradient(to bottom right, #3b82f6, #f59e0b);
         }
         #roster-title {
             font-weight: 700;
@@ -209,7 +222,7 @@
 
         .loader {
             border: 3px solid #e2e8f0;
-            border-top: 3px solid #1e3a8a; /* Match login screen text color */
+            border-top: 3px solid #1e3a8a;
             border-radius: 50%;
             width: 24px;
             height: 24px;
@@ -224,7 +237,8 @@
     <div id="login-container" class="main-container max-w-md">
         <header class="mb-8 text-center">
             <h1 class="text-4xl sm:text-5xl login-title">Παρουσιολόγιο</h1>
-            <p class="text-blue-900 mt-2 font-medium">Welcome! Let's get started.</p>
+            <!-- CHANGED: Welcome message -->
+            <p class="text-blue-900 mt-2 font-semibold text-lg">ΗΛΙΟΣ 2.0</p>
         </header>
         <div class="space-y-4">
             <button id="loadDataButton" class="w-full flex justify-center items-center gap-2 py-3 px-4 border border-transparent rounded-lg text-lg font-semibold login-button">
@@ -241,7 +255,7 @@
     </div>
 
     <div id="main-app-wrapper" class="main-container hidden">
-        <header class="mb-6 pb-6 border-b border-slate-200 text-center">
+        <header class="mb-6 pb-6 text-center">
             <h1 class="helios-title">ΗΛΙΟΣ</h1>
             <p class="text-slate-500 mt-4 text-lg" id="current-date-display"></p>
         </header>
@@ -374,13 +388,37 @@ function handleBulkUpdate(isPresent) {
 
 // --- RENDERING & NAVIGATION ---
 function renderNavigation() {
-    categoryNav.innerHTML = Object.keys(CATEGORIES).map(cat => {
+    // Category Buttons
+    let navHTML = Object.keys(CATEGORIES).map(cat => {
         const color = CATEGORIES[cat].color;
         const activeClass = cat === currentCategory ? `active-${color}` : '';
-        return `<button class="nav-button category-btn ${activeClass}" data-category="${cat}">${cat}</button>`;
+        // CHANGED: Added frame class
+        const frameClass = `frame-${color}`;
+        return `<button class="nav-button category-btn ${frameClass} ${activeClass}" data-category="${cat}">${cat}</button>`;
     }).join('');
     
-    renderClassButtons();
+    // Universal Search Button
+    const searchButtonActiveClass = currentCategory === 'ALL' ? 'active-gray' : '';
+    navHTML += `<button class="nav-button frame-gray ${searchButtonActiveClass}" id="search-all-btn" data-category="ALL">Search All</button>`;
+
+    categoryNav.innerHTML = navHTML;
+    
+    // Show or hide class navigation
+    if (currentCategory === 'ALL') {
+        classNav.classList.add('hidden');
+    } else {
+        classNav.classList.remove('hidden');
+        renderClassButtons();
+    }
+
+    // Add event listeners
+    document.getElementById('search-all-btn').addEventListener('click', () => {
+        currentCategory = 'ALL';
+        currentClass = null;
+        searchBar.value = '';
+        renderNavigation();
+        renderRoster();
+    });
 
     document.querySelectorAll('.category-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
@@ -397,7 +435,9 @@ function renderClassButtons() {
     const categoryColor = CATEGORIES[currentCategory].color;
     classNav.innerHTML = CATEGORIES[currentCategory].classes.map(cls => {
         const activeClass = cls === currentClass ? `active-${categoryColor}` : '';
-        return `<button class="nav-button class-button ${activeClass}" data-class="${cls}">${cls}</button>`;
+        // CHANGED: Added frame class
+        const frameClass = `frame-${categoryColor}`;
+        return `<button class="nav-button class-button ${frameClass} ${activeClass}" data-class="${cls}">${cls}</button>`;
     }).join('');
 
     document.querySelectorAll('.class-button').forEach(btn => {
@@ -440,24 +480,33 @@ function calculateMonthlyAttendance(athlete) {
 function renderRoster() {
     const rosterContent = document.getElementById('class-roster-content');
     const rosterTitle = document.getElementById('roster-title');
-    rosterTitle.textContent = `${currentCategory} - ${currentClass}`;
     
     const searchTerm = searchBar.value.toLowerCase();
-    const athletesInClass = allAthletesData
-        .filter(athlete => 
+    let athletesToDisplay;
+
+    if (currentCategory === 'ALL') {
+        rosterTitle.textContent = 'Αθλητές / Αθλήτριες';
+        athletesToDisplay = allAthletesData.filter(athlete => 
+            `${athlete.firstName} ${athlete.surname}`.toLowerCase().includes(searchTerm)
+        );
+    } else {
+        rosterTitle.textContent = `${currentCategory} - ${currentClass}`;
+        athletesToDisplay = allAthletesData.filter(athlete => 
             athlete.category === currentCategory && 
             athlete.class === currentClass &&
             `${athlete.firstName} ${athlete.surname}`.toLowerCase().includes(searchTerm)
-        )
-        .sort((a, b) => a.surname.localeCompare(b.surname) || a.firstName.localeCompare(b.firstName));
+        );
+    }
+    
+    athletesToDisplay.sort((a, b) => a.surname.localeCompare(b.surname) || a.firstName.localeCompare(b.firstName));
 
-    if (athletesInClass.length === 0) {
+    if (athletesToDisplay.length === 0) {
         rosterContent.innerHTML = `<p class="text-slate-500 italic p-6 text-center">No athletes found.</p>`;
         return;
     }
 
     const today = getTodayString();
-    rosterContent.innerHTML = athletesInClass.map(athlete => {
+    rosterContent.innerHTML = athletesToDisplay.map(athlete => {
         const isPaid = String(athlete.paymentStatus).toLowerCase() === 'paid';
         const healthStatus = String(athlete.health).toUpperCase();
         const isPresentToday = athlete.attendance && athlete.attendance[today];
